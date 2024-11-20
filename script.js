@@ -35,23 +35,6 @@ chrome.runtime.onMessage.addListener((obj, sender, res) => {
 		data
 	} = obj;
 	switch(type){
-		/*
-		case "settingresponse":
-			switch(data.block.set){
-				case 1:
-					window.location.href = data.block.data;
-					break;
-				case 2:
-					document.write(data.block.data);
-					break;
-			}
-			serverlist = data.slist;
-			inbox = data.inbox;
-			window.onbeforeunload = ()=>{
-				chrome.runtime.sendMessage({type: "tabremove",data: {}})
-			}
-			break;
-		*/
 		case "blockupdate":
 			switch(data.set){
 				case 1:

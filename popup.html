@@ -10,14 +10,67 @@
   <link rel='stylesheet' href='popup.css' type='text/css'>
 </head>
 <body>
+  <div id="dia-inv" class="dialog hid"><h1>Currently not on Discord</h1></div>
   <div id="content">
   <div class="maincontainer">
   <div class="section">
   <h1 id="mainheader" class="indent">DiscordFocused!</h1>
   </div>
   <div class="section">
-  <header><h2 class="indent">Let's be productive today!</h2></header>
+  <header><h2 class="indent">Element Blocks</h2></header>
+    
+    <div class="center-container-column">
+    <div class="formcontainernew">
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidslist">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidslist" title="Hide the list of servers on the left" class="sliderlabel">Hide Servers</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidinbox">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidinbox" title="Hide the inbox on the top right corner" class="sliderlabel">Hide Inbox</label>
+    </div>
+    </div>
+    </div>
+  
   </div>
+  <div class="section"><hr/></div>
+  <div class="section">
+  <header><h2 class="indent">Website Action</h2></header>
+  <h3>Tab Action</h3>
+  <select id="act-sel">
+  	<option value="0">None</option>
+  	<option value="1">Redirect</option>
+  	<option value="2">HTML</option>
+  	<option value="3">Close</option>
+  </select>
+  <input id="act-url" type="text" placeholder="Redirect URL" title="Redirect URL"></input>
+  <textarea id="act-html" placeholder="Message" title="Message for block"></textarea>
+  </div>
+  <div class="section"><hr/></div>
+  
+  <div class="section">
+  <header><h2 class="indent">Extension Settings</h2></header>
+    <div class="center-container-column">
+    <div class="formcontainernew">
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="exset-badge">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="exset-badge" title="Show badge number for connections open" class="sliderlabel">Display Badge</label>
+    </div>
+  </div>
+    
   </div>
   </div>
   <footer>Made by Pacifiky</footer>
