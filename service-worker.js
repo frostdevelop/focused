@@ -4,7 +4,7 @@ var sdata = {
 	block: {
 		set: 0,
 		data: ""
-	}
+	},
 	inbox: false,
 	slist: false
 }
