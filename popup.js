@@ -6,23 +6,25 @@ const urlaction = document.getElementById("act-url");
 const htmlaction = document.getElementById("act-html");
 const invdialog = document.getElementById("dia-inv");
 const badgechk = document.getElementById("exset-badge");
-chrome.runtime.sendMessage({type:"validtabrequest",data:{}},(b)=>{
-  if(b){invdialog.classList.remove("hid")};
+chrome.runtime.sendMessage({type:"validtabrequest",data:{}}).then((b)=>{
+  if(!b){invdialog.classList.remove("hid")};
 });
-chrome.runtime.sendMessage({type:"settingrequest",data:{}},(m)=>{
+chrome.runtime.sendMessage({type:"settingrequest",data:{}}).then((m)=>{
+  //console.log(m)
   hidinbchk.checked = m.inbox;
   hidlistchk.checked = m.slist;
   waction.value = m.block.set.toString();
   switch(m.block.set){
     case 1:
-      urlaction.value = = m.block.data;
+      urlaction.value = m.block.data;
       break;
     case 2:
       htmlaction.innerText = m.block.data;
       break;
   }
 });
-chrome.runtime.sendMessage({type:"prefrequest",data:{}},(m)=>{
+chrome.runtime.sendMessage({type:"prefrequest",data:{}}).then((m)=>{
+  //console.log(m)
   badgechk.checked = m.sbadge;
 });
 function updflags(){

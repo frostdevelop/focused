@@ -21,16 +21,20 @@ async function sendMessageToActiveTab(message) {
 }
 */
 function updBdg(){
-	chrome.browserAction.setBadgeText({text: btabs.length.toString()});
+	if(param.sbadge){
+		chrome.action.setBadgeText({text: btabs.length.toString()});
+	}else{
+		chrome.action.setBadgeText({text: ""});
+	}
 }
-chrome.runtime.onMessage.addListener(async (obj, sender, res)=>{
+chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	const {
 		type,
 		data
 	} = obj;
 	switch(type){
 		case "settingrequest":
-			if(sender.tab){btabs.push(sender.tab.id)};
+			if(sender.tab && !btabs.includes(sender.tab.id)){btabs.push(sender.tab.id);console.log(sender.tab.id);};
 			updBdg();
 			res(sdata);
 			break;
@@ -38,25 +42,41 @@ chrome.runtime.onMessage.addListener(async (obj, sender, res)=>{
 			res(param);
 			break;
 		case "validtabrequest":
-			const [atab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
 			//if(btabs.contains(atab.id)){res(true)}else{res(false)}
-			res(btabs.contains(atab.id));
-			break;
-		case "tabremove":
-			if(sender.tab){btabs.splice(btabs.indexOf(sender.tab.id),1);updBdg()}else{console.error("tabremove msg from non-tab sender")};
+			(async()=>{
+				const [atab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
+				//console.log(atab)
+				//console.log(btabs)
+				//console.log(atab.id)
+				//console.log(btabs.includes(atab.id))
+				res(btabs.includes(atab.id));
+				/*
+				res(new Promise(async resol => {
+					
+				}));
+				*/
+			})();
+			return true;
 			break;
 		case "blockupdate":
 			sdata.block.set = data.set;
 			sdata.block.data = data.data;
 			chrome.storage.local.set({"blind_settings":sdata});
+			for(let i=0;i<btabs.length;i++){
+				chrome.tabs.sendMessage(btabs[i],obj);
+			};
 			break;
 		case "flagupdate":
 			sdata.slist = data.slist;
 			sdata.inbox = data.inbox;
 			chrome.storage.local.set({"blind_settings":sdata});
+			for(let i=0;i<btabs.length;i++){
+				chrome.tabs.sendMessage(btabs[i],obj);
+			};
 			break;
 		case "prefupdate":
 			param = data;
+			updBdg();
 			chrome.storage.local.set({"blind_ex_settings":param});
 			break;
 	}
@@ -67,6 +87,7 @@ chrome.storage.local.get(["blind_settings","blind_ex_settings"]).then((d)=>{
 	if(d.blind_ex_settings){param = d}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
+	console.debug(info)
 	if(sdata.block.set === 3){
 		const hosturl = ((tab.url).split("/"))[2];
 		if(info.url && (hosturl === "discord.com" || hosturl === "discord.gg")){
@@ -78,6 +99,14 @@ chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
 		}
 	}
 });
+chrome.tabs.onRemoved.addListener((tabId,info)=>{
+	const indexbtab = btabs.indexOf(tabId);
+	if(indexbtab>=0){
+		btabs.splice(indexbtab,1);
+		updBdg();
+	}
+});
+
 chrome.runtime.onInstalled.addListener((det)=>{
 	switch(det.reason){
 		case "install":
@@ -89,4 +118,5 @@ chrome.runtime.onInstalled.addListener((det)=>{
 	}
 });
 //chrome.runtime.setUninstallURL()
-chrome.browserAction.setBadgeBackgroundColor({color:"#165c7a"});
+chrome.action.setBadgeBackgroundColor({color:"#165c7a"});
+//chrome.runtime.connect().onDisconnect.addListener()

@@ -1,39 +1,42 @@
 var serverlist,inbox = false;
 function change() {
 	//idc about queryselector that slow
-	if(serverlist || inbox){
-		const divs = document.getElementsByTagName("div");
-		for(let i=0;i<divs.length;i++){
-			switch(divs[i].getAttribute("aria-label")){
-				case "Servers":
-					if(serverlist) divs[i].style.display = "none";
-				case "Inbox":
-					if(inbox) divs[i].style.display = "none";
-			}
+	const divs = document.getElementsByTagName("div");
+	for(let i=0;i<divs.length;i++){
+		switch(divs[i].getAttribute("aria-label")){
+			case "Servers":
+				if(serverlist){divs[i].style.display = "none"}else{divs[i].style.display = ""};
+				break;
+			case "Inbox":
+				if(inbox){divs[i].style.display = "none";}else{divs[i].style.display = ""};
+				break;
 		}
 	}
 }
 const observer = new MutationObserver(mutations => {change();});
-
 //Get settings
-chrome.runtime.sendMessage({type: "settingrequest",data: {}},(m)=>{
+chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 	switch(m.block.set){
 		case 1:
 			window.location.href = m.block.data;
 			break;
 		case 2:
-			document.write(m.block.data);
+			document.open();
+			document.write("<html><head><title>Blocked!</title></head><body>"+m.block.data+"</body></html>");
+			document.close();
 			break;
 	}
 	serverlist = m.slist;
 	inbox = m.inbox;
-	window.onbeforeunload = ()=>{chrome.runtime.sendMessage({type: "tabremove",data: {}})}
+	//alert(inbox);
+	//alert(serverlist);
 })
 chrome.runtime.onMessage.addListener((obj, sender, res) => {
 	const {
 		type,
 		data
 	} = obj;
+	//alert(obj)
 	switch(type){
 		case "blockupdate":
 			switch(data.set){
@@ -41,16 +44,20 @@ chrome.runtime.onMessage.addListener((obj, sender, res) => {
 					window.location.href = data.data;
 					break;
 				case 2:
-					document.write(data.data);
+					document.open();
+					document.write("<html><head><title>Blocked!</title></head><body>"+data.data+"</body></html>");
+					document.close();
 					break;
 			}
 			break;
 		case "flagupdate":
+			//console.log(data);
 			serverlist = data.slist;
 			inbox = data.inbox;
+			change();
 			break;
 	}
-}
+})
 observer.observe(document.body, {
 	childList: true,
 	subtree: true
