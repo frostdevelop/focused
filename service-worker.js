@@ -27,6 +27,40 @@ function updBdg(){
 		chrome.action.setBadgeText({text: ""});
 	}
 }
+function updIco(){
+	switch(sdata.block.set){
+		case 0:
+			chrome.action.setIcon({
+				path: {
+					16: "icon-16.png",   // Path to the 16x16 icon
+					48: "icon-48.png",   // Path to the 48x48 icon
+					128: "icon-128.png"  // Path to the 128x128 icon
+				}
+			}, () => {
+				if (chrome.runtime.lastError) {
+					console.error(chrome.runtime.lastError);
+				} else {
+					console.log("Icon successfully updated!");
+				}
+			});
+			break;
+		default:
+			chrome.action.setIcon({
+				path: {
+					16: "ocon-16.png",   // Path to the 16x16 icon
+					48: "ocon-48.png",   // Path to the 48x48 icon
+					128: "ocon-128.png"  // Path to the 128x128 icon
+				}
+			}, () => {
+				if (chrome.runtime.lastError) {
+					console.error(chrome.runtime.lastError);
+				} else {
+					console.log("Icon successfully updated!");
+				}
+			});
+			break;
+	}
+}
 chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	const {
 		type,
@@ -65,6 +99,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
 			};
+			updIco();
 			break;
 		case "flagupdate":
 			sdata.slist = data.slist;
@@ -85,6 +120,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 chrome.storage.local.get(["blind_settings","blind_ex_settings"]).then((d)=>{
 	if(d.blind_settings){sdata = d.blind_settings}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
 	if(d.blind_ex_settings){param = d}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	updIco();
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
 	console.debug(info)
