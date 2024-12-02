@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>TwitterFocused!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  <link rel='stylesheet' href='popup.css' type='text/css'>
+</head>
+<body>
+  <div id="dia-inv" class="dialog hid"><h1>Currently not on Twitter</h1></div>
+  <div id="content">
+  <div class="maincontainer">
+  <div class="section">
+  <h1 id="mainheader" class="indent">TwitterFocused!</h1>
+  </div>
+  <div class="section">
+  <header><h2 class="indent">Element Blocks</h2></header>
+    
+    <div class="center-container-column">
+    <div class="formcontainernew">
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidtimel">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidslist" title="Hide your timeline (homepage)!" class="sliderlabel">Hide Timeline</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidnotif">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidnotif" title="Hide your notifications!" class="sliderlabel">Hide Notifications</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidtrend">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidtrend" title="Hide the trending box to the right!``" class="sliderlabel">Hide Trending</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidwhotf">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidwhotf" title="Hide the who to follow box on the right side!" class="sliderlabel">Hide Who to follow</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidrisid">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidrisid" title="Hide all elements of the right sidebar!" class="sliderlabel">Hide Right Sidebar</label>
+    </div>
+    
+    </div>
+    </div>
+  </div>
+  <div class="section"><hr/></div>
+  <div class="section">
+  <header><h2 class="indent">Website Action</h2></header>
+  <h3>Tab Action</h3>
+  <select id="act-sel">
+  	<option value="0">None</option>
+  	<option value="1">Redirect</option>
+  	<option value="2">HTML</option>
+  	<option value="3">Close</option>
+  </select>
+  <input id="act-url" type="text" placeholder="Redirect URL" title="Redirect URL"></input>
+  <textarea id="act-html" placeholder="Message" title="Message for block"></textarea>
+  </div>
+  <div class="section"><hr/></div>
+  
+  <div class="section">
+  <header><h2 class="indent">Extension Settings</h2></header>
+    <div class="center-container-column">
+    <div class="formcontainernew">
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="exset-badge">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="exset-badge" title="Show badge number for connections open" class="sliderlabel">Display Badge</label>
+    </div>
+  </div>
+    
+  </div>
+  </div>
+  <footer>Made by Pacifiky</footer>
+  <script src="popup.js"></script>
+</body>
+</html>
