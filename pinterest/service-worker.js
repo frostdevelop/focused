@@ -1,16 +1,19 @@
 'use strict';
 //Must have chrome 99+
 var sdata = {
+	version: 1,
 	block: {
 		set: 0,
 		data: ""
 	},
 	mbutn: false,
 	rpins: false,
-	hfeed: false
+	hfeed: false,
+	srbar: false
 }
 var btabs = [];
 var param = {
+	version: 1,
 	sbadge: true,
 	rnotes: true
 }
@@ -63,6 +66,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 			sdata.mbutn = data.mbutn;
 			sdata.rpins = data.rpins;
 			sdata.hfeed = data.hfeed;
+			sdata.srbar = data.srbar;
 			chrome.storage.local.set({"blind_settings":sdata});
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
@@ -77,14 +81,15 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 });
 //Request storage for sdata
 chrome.storage.local.get(["blind_settings","blind_ex_settings"]).then((d)=>{
-	if(d.blind_settings){sdata = d.blind_settings}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
+	if(d.blind_settings){sdata = d.blind_settings;if(sdata.version < 1){sdata.version = 1;sdata.srbar = false;chrome.storage.local.set({"blind_settings":sdata});}}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
 	if(d.blind_ex_settings){param = d}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
 	console.debug(info)
 	if(sdata.block.set === 3){
 		const hosturl = ((tab.url).split("/"))[2];
-		if(info.url && hosturl === "pinterest.com"){
+		console.log(hosturl);
+		if(info.url && hosturl === "www.pinterest.com"){
 			try{
 				await chrome.tabs.remove(tabId);
 			} catch(e) {

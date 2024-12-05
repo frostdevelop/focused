@@ -1,4 +1,4 @@
-var mbutn,rpins,hfeed = false;
+var mbutn,rpins,hfeed,srbar = false;
 function change() {
 	const divs = document.getElementsByTagName("div");
 	for(let i=0;i<divs.length;i++){
@@ -14,6 +14,9 @@ function change() {
 				break;
 		}
 	}
+	//console.log("hi");
+	const sb = document.getElementById("searchBoxContainer");
+	if(sb){if(srbar){sb.style.display = "none"}else{sb.style.display = ""}};
 }
 const observer = new MutationObserver(mutations => {change();});
 //Get settings
@@ -31,6 +34,7 @@ chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 	mbutn = m.mbutn;
 	rpins = m.rpins;
 	hfeed = m.hfeed;
+	srbar = m.srbar;
 })
 chrome.runtime.onMessage.addListener((obj, sender, res) => {
 	const {
@@ -56,11 +60,16 @@ chrome.runtime.onMessage.addListener((obj, sender, res) => {
 			mbutn = data.mbutn;
 			rpins = data.rpins;
 			hfeed = data.hfeed;
+			srbar = data.srbar;
 			change();
 			break;
 	}
 })
-observer.observe(document.body, {
-	childList: true,
-	subtree: true
+window.addEventListener('load',e=>{
+	console.log("DomLoaded!");
+	observer.observe(document, {
+		childList: true,
+		subtree: true
+	});
+	change();
 });

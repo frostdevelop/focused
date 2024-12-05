@@ -2,6 +2,7 @@
 const hidhfeedchk = document.getElementById("hidhfeed");
 const hidrpinschk = document.getElementById("hidrpins");
 const hidmbutnchk = document.getElementById("hidmbutn");
+const hidsrbarchk = document.getElementById("hidsrbar");
 const waction = document.getElementById("act-sel");
 const urlaction = document.getElementById("act-url");
 const htmlaction = document.getElementById("act-html");
@@ -17,6 +18,7 @@ chrome.runtime.sendMessage({type:"settingrequest",data:{}}).then((m)=>{
   hidhfeedchk.checked = m.hfeed;
   hidrpinschk.checked = m.rpins;
   hidmbutnchk.checked = m.mbutn;
+  hidsrbarchk.checked = m.srbar;
   waction.value = m.block.set.toString();
   switch(m.block.set){
     case 1:
@@ -35,7 +37,7 @@ chrome.runtime.sendMessage({type:"prefrequest",data:{}}).then((m)=>{
 
 
 function updflags(){
-  chrome.runtime.sendMessage({type:"flagupdate",data:{mbutn:hidmbutnchk.checked,rpins:hidrpinschk.checked,hfeed:hidhfeedchk.checked}});
+  chrome.runtime.sendMessage({type:"flagupdate",data:{mbutn:hidmbutnchk.checked,rpins:hidrpinschk.checked,hfeed:hidhfeedchk.checked,srbar:hidsrbarchk.checked}});
 }
 function updblock(){
   chrome.runtime.sendMessage({type:"blockupdate",data:{set:parseInt(waction.value),data:(waction.value === "1" ? urlaction.value : (waction.value === "2" ? htmlaction.value : "") )}});
@@ -46,6 +48,7 @@ function updexset(){
 hidmbutnchk.addEventListener("change",updflags);
 hidrpinschk.addEventListener("change",updflags);
 hidhfeedchk.addEventListener("change",updflags);
+hidsrbarchk.addEventListener("change",updflags);
 waction.addEventListener("change",updblock);
 urlaction.addEventListener("change",updblock);
 htmlaction.addEventListener("change",updblock);
