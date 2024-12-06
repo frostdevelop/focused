@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>YouTubeFocused</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  <link rel='stylesheet' href='popup.css' type='text/css'>
+</head>
+<body>
+  <div id="dia-inv" class="dialog hid"><h1>Currently not on YouTube``</h1></div>
+  <div id="content">
+  <div class="maincontainer">
+  <div class="section">
+  <h1 id="mainheader" class="indent">YouTubeFocused!</h1>
+  </div>
+  <div class="section">
+  <header><h2 class="indent">Element Blocks</h2></header>
+    
+    <div class="center-container-column">
+    <div class="formcontainernew">
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidnotif">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidnotif" title="Hide the notification button!" class="sliderlabel">Hide Notifications</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidcomme">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidcomme" title="Hide the comment section!" class="sliderlabel">Hide Comments</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidrevid">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidrevid" title="Hide the related videos next to your video!" class="sliderlabel">Hide Related Videos</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidetile">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidetile" title="Hide the end screen video tiles!" class="sliderlabel">Hide End Screen Tiles</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidhomep">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidhomep" title="Hide the entire homepage!" class="sliderlabel">Hide Homepage</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidhomef">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidhomef" title="Hide the homepage filter carousels!" class="sliderlabel">Hide Homepage Filter</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidshort">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidshort" title="Hide shorts carousels!" class="sliderlabel">Hide Shorts</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidcpfps">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidcpfps" title="Hide comment profile pictures!" class="sliderlabel">Hide Comment pfps</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hiduinfo">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hiduinfo" title="Hide the info about uploader!" class="sliderlabel">Hide Uploader info</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidlsect">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidlsect" title="Hide the like and other buttons!" class="sliderlabel">Hide Like Section</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidcname">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidcname" title="Hide all channel names!" class="sliderlabel">Hide Channel names</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hiddescr">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hiddescr" title="Hide the video description!" class="sliderlabel">Hide Description</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidscomm">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidscomm" title="Hide the comments on shorts!" class="sliderlabel">Hide Shorts comments</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="blkshort">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="blkshort" title="Block shorts pages!" class="sliderlabel">Block Shorts</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidexplo">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidexplo" title="Hide the explore sidebar!" class="sliderlabel">Hide Explore</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidmfyou">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidmfyou" title="Hide the more from youtube sidebar!" class="sliderlabel">Hide More from youtube</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidsubsc">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidsubsc" title="Hide the subscriptions sidebar!" class="sliderlabel">Hide Subscriptions</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidmnavi">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidmnavi" title="Hide the main navigation sidebar!" class="sliderlabel">Hide Main Nav</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidplayl">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidplayl" title="Hide the playlist (during video playback)!" class="sliderlabel">Hide Playlist</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hidlchat">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hidlchat" title="Hide livestream chat!" class="sliderlabel">Hide Chat</label>
+    </div>
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="hiddonsh">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="hiddonsh" title="Hide the donation shelfs!" class="sliderlabel">Hide Donation Shelf</label>
+    </div>
+    
+    </div>
+    </div>
+  </div>
+  <div class="section"><hr/></div>
+  <div class="section">
+  <header><h2 class="indent">Website Action</h2></header>
+  <h3>Tab Action</h3>
+  <select id="act-sel">
+  	<option value="0">None</option>
+  	<option value="1">Redirect</option>
+  	<option value="2">HTML</option>
+  	<option value="3">Close</option>
+  </select>
+  <input id="act-url" type="text" placeholder="Redirect URL" title="Redirect URL"></input>
+  <textarea id="act-html" placeholder="Message" title="Message for block"></textarea>
+  </div>
+  <div class="section"><hr/></div>
+  
+  <div class="section">
+  <header><h2 class="indent">Extension Settings</h2></header>
+    <div class="center-container-column">
+    <div class="formcontainernew">
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="exset-badge">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="exset-badge" title="Show badge number for connections open" class="sliderlabel">Display Badge</label>
+    </div>
+    
+    
+    <div class="slidercontainer">
+    <label class="switch">
+      <input type="checkbox" id="exset-rn">
+      <span class="slider round"></span>
+    </label>
+    <div class="vl"></div>
+    <label for="exset-rn" title="Show update release notes whenever the extension is updated!" class="sliderlabel">Show Release Notes</label>
+    </div>
+    
+  </div>
+  </div>
+  </div>
+  <footer>Made by Pacifiky</footer>
+  <script src="popup.js"></script>
+</body>
+</html>
