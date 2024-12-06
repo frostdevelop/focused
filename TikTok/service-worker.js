@@ -1,13 +1,18 @@
 'use strict';
 //Must have chrome 99+
 var sdata = {
-	version: 1,
+	version: 2,
 	block: {
 		set: 0,
 		data: ""
 	},
 	inbox: false,
-	hfeed: false
+	hfeed: false,
+	facct: false,
+	comme: false,
+	sbars: false,
+	ucont: false,
+	rvids: false
 }
 var btabs = [];
 var param = {
@@ -98,6 +103,11 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 		case "flagupdate":
 			sdata.inbox = data.inbox;
 			sdata.hfeed = data.hfeed;
+			sdata.facct = data.facct;
+			sdata.comme = data.comme;
+			sdata.sbars = data.sbars;
+			sdata.ucont = data.ucont;
+			sdata.rvids = data.rvids;
 			chrome.storage.local.set({"blind_settings":sdata});
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
@@ -112,7 +122,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 });
 //Request storage for sdata
 chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
-	if(d.blind_settings){sdata = d.blind_settings;updIco();}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
+	if(d.blind_settings){sdata = d.blind_settings;if(sdata.version != 2){sdata.facct = sdata.comme = sdata.sbars = sdata.ucont = sdata.rvids = false;sdata.version = 2;};updIco();}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
 	if(d.blind_ex_settings){param = d.blind_ex_settings}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
 	if(d.blind_tabs){btabs = d.blind_tabs};
 });
