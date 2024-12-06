@@ -1,4 +1,4 @@
-var serverlist,inbox = false;
+var serverlist,inbox,clist,mlist,dlist,hpbtn,fsbar = false;
 function change() {
 	//idc about queryselector that slow
 	const divs = document.getElementsByTagName("div");
@@ -10,8 +10,17 @@ function change() {
 			case "Inbox":
 				if(inbox){divs[i].style.display = "none";}else{divs[i].style.display = ""};
 				break;
+			case "Servers sidebar":
+				if(fsbar){divs[i].style.display = "none !important";}else{divs[i].style.display = "";}
+				break;
+			case "Members":
+				if(mlist){divs[i].style.display = "none !important";}else{divs[i].style.display = "";}
+				break;
 		}
 	}
+	if(dlist){document.querySelector('nav[aria-label="Private channels"]').style.display = "none !important";}else{document.querySelector('nav[aria-label="Private channels"]').style.display = "";};
+	if(clist){document.getElementById("channels").style.display = "none !important";}else{document.getElementById("channels").style.display = "";};
+	if(hpbtn){document.querySelector('ul[data-list-id="guildsnav"]').children[1].firstChild.firstChild.style.display = "none !important";}else{document.querySelector('ul[data-list-id="guildsnav"]').children[1].firstChild.firstChild.style.display = "";};
 }
 const observer = new MutationObserver(mutations => {change();});
 //Get settings
@@ -28,6 +37,11 @@ chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 	}
 	serverlist = m.slist;
 	inbox = m.inbox;
+	clist = m.clist;
+	mlist = m.mlist;
+	dlist = m.dlist;
+	hpbtn = m.hpbtn;
+	fsbar = m.fsbar;
 	//alert(inbox);
 	//alert(serverlist);
 })
@@ -54,6 +68,11 @@ chrome.runtime.onMessage.addListener((obj, sender, res) => {
 			//console.log(data);
 			serverlist = data.slist;
 			inbox = data.inbox;
+			clist = data.clist;
+			mlist = data.mlist;
+			dlist = data.dlist;
+			hpbtn = data.hpbtn;
+			fsbar = data.fsbar;
 			change();
 			break;
 	}

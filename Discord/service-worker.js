@@ -1,16 +1,24 @@
 'use strict';
 //Must have chrome 99+
 var sdata = {
+	version: 2,
 	block: {
 		set: 0,
 		data: ""
 	},
 	inbox: false,
-	slist: false
+	slist: false,
+	fsbar: false,
+	hpbtn: false,
+	dlist: false,
+	mlist: false,
+	clist: false
 }
 var btabs = [];
 var param = {
-	sbadge: true
+	version: 1, 
+	sbadge: true,
+	rnotes: false
 }
 /*
 async function sendMessageToActiveTab(message) {
@@ -104,6 +112,11 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 		case "flagupdate":
 			sdata.slist = data.slist;
 			sdata.inbox = data.inbox;
+			sdata.clist = data.clist;
+			sdata.mlist = data.mlist;
+			sdata.dlist = data.dlist;
+			sdata.hpbtn = data.hpbtn;
+			sdata.fsbar = data.fsbar;
 			chrome.storage.local.set({"blind_settings":sdata});
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
@@ -118,8 +131,8 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 });
 //Request storage for sdata
 chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
-	if(d.blind_settings){sdata = d.blind_settings}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
-	if(d.blind_ex_settings){param = d.blind_ex_settings}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	if(d.blind_settings){sdata = d.blind_settings;if(sdata.version < 2){sdata.clist = sdata.mlist = sdata.dlist = sdata.hpbtn = sdata.fsbar = false;sdata.version = 2;chrome.storage.local.set({"blind_settings":sdata});};updIco();}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
+	if(d.blind_ex_settings){param.sbadge = d.blind_ex_settings.sbadge || true;param.version = d.blind_ex_settings.version || 1;param.rnotes = d.blind_ex_settings.rnotes || false;}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
 	if(d.blind_tabs){btabs = d.blind_tabs};
 	updIco();
 });
@@ -151,7 +164,7 @@ chrome.runtime.onInstalled.addListener((det)=>{
 			//chrome.storage.local.set({"blind_settings":sdata});
 			break;
 		case "update":
-			chrome.tabs.create({url: "https://github.com/frostdevelop/focused/releases"})
+			if(param.rnotes) chrome.tabs.create({url: "https://github.com/frostdevelop/focused/releases"});
 			break;
 	}
 });
