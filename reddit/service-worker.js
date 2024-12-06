@@ -1,16 +1,20 @@
 'use strict';
 //Must have chrome 99+
 var sdata = {
+	version: 1,
 	block: {
 		set: 0,
 		data: ""
 	},
 	inb: false,
 	nav: false,
-	rsb: false
+	rsb: false,
+	ser: false,
+	msg: false
 }
 var btabs = [];
 var param = {
+	version: 1,
 	sbadge: true,
 	rnotes: true
 }
@@ -29,6 +33,40 @@ function updBdg(){
 		chrome.action.setBadgeText({text: ""});
 	}
 }
+function updIco(){
+	switch(sdata.block.set){
+		case 0:
+			chrome.action.setIcon({
+				path: {
+					16: "icon-16.png",   // Path to the 16x16 icon
+					48: "icon-48.png",   // Path to the 48x48 icon
+					128: "icon-128.png"  // Path to the 128x128 icon
+				}
+			}, () => {
+				if (chrome.runtime.lastError) {
+					console.error(chrome.runtime.lastError);
+				} else {
+					console.log("Icon successfully updated!");
+				}
+			});
+			break;
+		default:
+			chrome.action.setIcon({
+				path: {
+					16: "ocon-16.png",   // Path to the 16x16 icon
+					48: "ocon-48.png",   // Path to the 48x48 icon
+					128: "ocon-128.png"  // Path to the 128x128 icon
+				}
+			}, () => {
+				if (chrome.runtime.lastError) {
+					console.error(chrome.runtime.lastError);
+				} else {
+					console.log("Icon successfully updated!");
+				}
+			});
+			break;
+	}
+}
 chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	const {
 		type,
@@ -36,7 +74,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	} = obj;
 	switch(type){
 		case "settingrequest":
-			if(sender.tab && !btabs.includes(sender.tab.id)){btabs.push(sender.tab.id);console.log(sender.tab.id);};
+			if(sender.tab && !btabs.includes(sender.tab.id)){btabs.push(sender.tab.id);chrome.storage.local.set({"blind_tabs":btabs});console.log(sender.tab.id);};
 			updBdg();
 			res(sdata);
 			break;
@@ -67,11 +105,14 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
 			};
+			updIco();
 			break;
 		case "flagupdate":
 			sdata.inb = data.inb;
 			sdata.nav = data.nav;
 			sdata.rsb = data.rsb;
+			sdata.ser = data.ser;
+			sdata.msg = data.msg;
 			chrome.storage.local.set({"blind_settings":sdata});
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
@@ -85,15 +126,16 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	}
 });
 //Request storage for sdata
-chrome.storage.local.get(["blind_settings","blind_ex_settings"]).then((d)=>{
-	if(d.blind_settings){sdata = d.blind_settings}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
-	if(d.blind_ex_settings){param = d}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
+	if(d.blind_settings){sdata = d.blind_settings;if(sdata.version != 1){sdata.msg = sdata.ser = false;sdata.version = 1;chrome.storage.local.set({"blind_settings":sdata})};updIco();}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
+	if(d.blind_ex_settings){param = d.blind_ex_settings}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	if(d.blind_tabs){btabs = d.blind_tabs};
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
 	console.debug(info)
 	if(sdata.block.set === 3){
 		const hosturl = ((tab.url).split("/"))[2];
-		if(info.url && hosturl === "reddit.com"){
+		if(info.url && hosturl === "www.reddit.com"){
 			try{
 				await chrome.tabs.remove(tabId);
 			} catch(e) {
@@ -106,6 +148,7 @@ chrome.tabs.onRemoved.addListener((tabId,info)=>{
 	const indexbtab = btabs.indexOf(tabId);
 	if(indexbtab>=0){
 		btabs.splice(indexbtab,1);
+		chrome.storage.local.set({"blind_tabs":btabs});
 		updBdg();
 	}
 });

@@ -2,6 +2,8 @@
 const hidinbchk = document.getElementById("hidinb");
 const hidnavchk = document.getElementById("hidnav");
 const hidrsbchk = document.getElementById("hidrsb");
+const hidmsgchk = document.getElementById("hidmsg");
+const hidserchk = document.getElementById("hidser");
 const waction = document.getElementById("act-sel");
 const urlaction = document.getElementById("act-url");
 const htmlaction = document.getElementById("act-html");
@@ -17,6 +19,8 @@ chrome.runtime.sendMessage({type:"settingrequest",data:{}}).then((m)=>{
   hidinbchk.checked = m.inb;
   hidnavchk.checked = m.nav;
   hidrsbchk.checked = m.rsb;
+  hidmsgchk.checked = m.msg;
+  hidserchk.checked = m.ser;
   waction.value = m.block.set.toString();
   switch(m.block.set){
     case 1:
@@ -36,7 +40,7 @@ chrome.runtime.sendMessage({type:"prefrequest",data:{}}).then((m)=>{
 
 function updflags(){
   //alert("hi");
-  chrome.runtime.sendMessage({type:"flagupdate",data:{inb:hidinbchk.checked,nav:hidnavchk.checked,rsb:hidrsbchk.checked}});
+  chrome.runtime.sendMessage({type:"flagupdate",data:{inb:hidinbchk.checked,nav:hidnavchk.checked,rsb:hidrsbchk.checked,msg:hidmsgchk.checked,ser:hidserchk.checked}});
   //console.dir({slist:hidlistchk.checked,inbox:hidinbchk.checked})
 }
 function updblock(){
@@ -49,6 +53,8 @@ function updexset(){
 hidinbchk.addEventListener("change",updflags);
 hidnavchk.addEventListener("change",updflags);
 hidrsbchk.addEventListener("change",updflags);
+hidserchk.addEventListener("change",updflags);
+hidmsgchk.addEventListener("change",updflags);
 waction.addEventListener("change",updblock);
 urlaction.addEventListener("change",updblock);
 htmlaction.addEventListener("change",updblock);

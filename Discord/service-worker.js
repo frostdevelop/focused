@@ -68,7 +68,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	} = obj;
 	switch(type){
 		case "settingrequest":
-			if(sender.tab && !btabs.includes(sender.tab.id)){btabs.push(sender.tab.id);console.log(sender.tab.id);};
+			if(sender.tab && !btabs.includes(sender.tab.id)){btabs.push(sender.tab.id);chrome.storage.local.set({"blind_tabs":btabs});console.log(sender.tab.id);};
 			updBdg();
 			res(sdata);
 			break;
@@ -117,9 +117,10 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 	}
 });
 //Request storage for sdata
-chrome.storage.local.get(["blind_settings","blind_ex_settings"]).then((d)=>{
+chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
 	if(d.blind_settings){sdata = d.blind_settings}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
-	if(d.blind_ex_settings){param = d}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	if(d.blind_ex_settings){param = d.blind_ex_settings}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	if(d.blind_tabs){btabs = d.blind_tabs};
 	updIco();
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
@@ -139,6 +140,7 @@ chrome.tabs.onRemoved.addListener((tabId,info)=>{
 	const indexbtab = btabs.indexOf(tabId);
 	if(indexbtab>=0){
 		btabs.splice(indexbtab,1);
+		chrome.storage.local.set({"blind_tabs":btabs});
 		updBdg();
 	}
 });

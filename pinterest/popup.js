@@ -30,7 +30,7 @@ chrome.runtime.sendMessage({type:"settingrequest",data:{}}).then((m)=>{
   }
 });
 chrome.runtime.sendMessage({type:"prefrequest",data:{}}).then((m)=>{
-  //console.log(m)
+  console.log(m);
   badgechk.checked = m.sbadge;
   rnotechk.checked = m.rnotes;
 });

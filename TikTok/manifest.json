@@ -23,7 +23,7 @@
   },
   "content_scripts": [
     {
-      "matches": [ "https://tiktok.com/*" ],
+      "matches": [ "https://*.tiktok.com/*" ],
       "js": [ "script.js" ]
     }
   ]
