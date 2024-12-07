@@ -49,6 +49,17 @@ function updBdg(){
 		chrome.action.setBadgeText({text: ""});
 	}
 }
+async function vBtabs(){
+	//console.log(btabs.length);
+	for(let i=btabs.length-1;i>=0;i--){
+		chrome.tabs.get(btabs[i],()=>{if(chrome.runtime.lastError){btabs.splice(i,1);console.log(btabs)}})
+		/*
+		await chrome.tabs.get(btabs[i]);
+		if(chrome.runtime.lastError){btabs.splice(i,1)};
+		console.log(chrome.runtime.lastError);
+		*/
+	}
+}
 function updIco(){
 	switch(sdata.block.set){
 		case 0:
@@ -126,8 +137,10 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 			};
 			break;
 		case "prefupdate":
-			param = data;
+			param.sbadge = data.sbadge;
+			param.rnotes = data.rnotes;
 			updBdg();
+			console.log(param);
 			chrome.storage.local.set({"blind_ex_settings":param});
 			break;
 	}
@@ -135,14 +148,14 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 //Request storage for sdata
 chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
 	if(d.blind_settings){sdata = d.blind_settings;updIco()}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
-	if(d.blind_ex_settings){param = d}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
-	if(d.blind_tabs){btabs = d.blind_tabs};
+	if(d.blind_ex_settings){param = d.blind_ex_settings;if(param.version != 1){param.version = 1;param.rnotes = true;chrome.storage.local.set({"blind_ex_settings":param});};updBdg();}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	if(d.blind_tabs){btabs = d.blind_tabs;vBtabs();};
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
 	console.debug(info)
 	if(sdata.block.set === 3){
 		const hosturl = ((tab.url).split("/"))[2];
-		if(info.url && hosturl === "youtube.com"){
+		if(info.url && hosturl === "www.youtube.com"){
 			try{
 				await chrome.tabs.remove(tabId);
 			} catch(e) {

@@ -10,17 +10,26 @@ function change() {
 			case "Inbox":
 				if(inbox){divs[i].style.display = "none";}else{divs[i].style.display = ""};
 				break;
+			/*
 			case "Servers sidebar":
-				if(fsbar){divs[i].style.display = "none !important";}else{divs[i].style.display = "";}
+				if(fsbar){divs[i].style.display = "none";}else{divs[i].style.display = "";}
 				break;
 			case "Members":
-				if(mlist){divs[i].style.display = "none !important";}else{divs[i].style.display = "";}
+				if(mlist){divs[i].style.display = "none";}else{divs[i].style.display = "";}
 				break;
+			*/
 		}
 	}
-	if(dlist){document.querySelector('nav[aria-label="Private channels"]').style.display = "none !important";}else{document.querySelector('nav[aria-label="Private channels"]').style.display = "";};
-	if(clist){document.getElementById("channels").style.display = "none !important";}else{document.getElementById("channels").style.display = "";};
-	if(hpbtn){document.querySelector('ul[data-list-id="guildsnav"]').children[1].firstChild.firstChild.style.display = "none !important";}else{document.querySelector('ul[data-list-id="guildsnav"]').children[1].firstChild.firstChild.style.display = "";};
+	const dlistelm = document.querySelector('nav[aria-label="Private channels"]');
+	const clistelm = document.getElementById("channels");
+	const hpbtnelm = document.querySelector('ul[data-list-id="guildsnav"]')?.children[1]?.firstChild?.firstChild;
+	const mlistelm = document.querySelector('ul[aria-label="Members"]');
+	const fsbarelm = document.querySelector('nav[aria-label="Servers sidebar"]');
+	if(dlistelm){if(dlist){dlistelm.style.display = "none";}else{dlistelm.style.display = "";}};
+	if(clistelm){if(clist){clistelm.style.display = "none";}else{clistelm.style.display = "";}};
+	if(hpbtnelm){if(hpbtn){hpbtnelm.style.display = "none";}else{hpbtnelm.style.display = "";}};
+	if(mlistelm){if(mlist){mlistelm.style.display = "none";}else{mlistelm.style.display = "";}};
+	if(fsbarelm){if(fsbar){fsbarelm.style.display = "none";}else{fsbarelm.style.display = "";}};
 }
 const observer = new MutationObserver(mutations => {change();});
 //Get settings

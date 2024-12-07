@@ -35,6 +35,11 @@ function updBdg(){
 		chrome.action.setBadgeText({text: ""});
 	}
 }
+async function vBtabs(){
+	for(let i=btabs.length-1;i>=0;i--){
+		chrome.tabs.get(btabs[i],()=>{if(chrome.runtime.lastError){btabs.splice(i,1);console.log(btabs)}})
+	}
+}
 function updIco(){
 	switch(sdata.block.set){
 		case 0:
@@ -117,6 +122,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 			sdata.dlist = data.dlist;
 			sdata.hpbtn = data.hpbtn;
 			sdata.fsbar = data.fsbar;
+			//console.log(sdata);
 			chrome.storage.local.set({"blind_settings":sdata});
 			for(let i=0;i<btabs.length;i++){
 				chrome.tabs.sendMessage(btabs[i],obj);
@@ -133,7 +139,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
 	if(d.blind_settings){sdata = d.blind_settings;if(sdata.version < 2){sdata.clist = sdata.mlist = sdata.dlist = sdata.hpbtn = sdata.fsbar = false;sdata.version = 2;chrome.storage.local.set({"blind_settings":sdata});};updIco();}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
 	if(d.blind_ex_settings){param.sbadge = d.blind_ex_settings.sbadge || true;param.version = d.blind_ex_settings.version || 1;param.rnotes = d.blind_ex_settings.rnotes || false;}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
-	if(d.blind_tabs){btabs = d.blind_tabs};
+	if(d.blind_tabs){btabs = d.blind_tabs;vBtabs();};
 	updIco();
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
