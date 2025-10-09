@@ -1,4 +1,4 @@
-var odata = {
+let odata = {
   notif: false,
   comme: false,
   revid: false,
@@ -21,9 +21,69 @@ var odata = {
   lchat: false,
   donsh: false
 }
-var podata = Object.assign({},odata);
+const podata = Object.assign({},odata);
+const logTag = '\033[41m[FocusYouTube]\033[0m ';
 
+let videoObserverIdle = true;
+function processFormat(){
+	console.log(logTag+'Detected format');
+	const content = document.getElementById('microformat')?.firstChild?.firstChild?.innerText;
+	if(content && videoObserverIdle){
+		const oldMessage = document.getElementById('FocusYouTube-Message');
+		console.log(oldMessage);
+		oldMessage && oldMessage.parentElement.remove(oldMessage);
+		const info = JSON.parse(content);
+		if(info.genre != 'Music'){
+			console.log(logTag+'Blocking video due to bad tag');
+			//let counter = 0;
+			videoObserverIdle = false;
+			const videoObserver = new MutationObserver(()=>{
+				const videoElm = document.getElementsByTagName('video')[0];
+				const capCont = document.getElementById('ytp-caption-window-container');
+				if(videoElm){
+					/*
+					if(counter > 1000){
+						console.log('Counter Disconnected');
+						videoObserver.disconnect();
+					}
+					*/
+					const container = videoElm.parentElement;
+					container.removeChild(videoElm);
+					//const player = document.getElementById('full-bleed-container'); //document.getElementsByTagName('video')[0]?.parentElement
+					//player.innerHTML = trustedTypes.emptyHTML
+					//container.parentElement
+					//document.write(dummyPolicy.createHTML("<!DOCTYPE html><html><head><title>WEBSITE BLOCKED</title><style>body{display:flex;background:white;align-items:center;justify-items:center;}</style></head><body><</body></html>"));
+				}
+				if(capCont){
+					videoObserverIdle = true;
+					videoObserver.disconnect();
+					const msgCont = document.createElement('div');
+					msgCont.style.display = 'grid';
+					msgCont.style.alignItems = 'center';
+					msgCont.style.justifyContent = 'center';
+					msgCont.style.height = '100%';
+					msgCont.style.width = '100%';
+					msgCont.style.background = 'url("'+info.thumbnailUrl[0]+'")';
+					msgCont.style.position = 'relative';
+					msgCont.style.zIndex = '99';
+					msgCont.style.pointerEvents = 'all';
+					const msgElm = document.createElement('span');
+					msgElm.style.padding = '50px';
+					msgElm.style.background = 'rgba(0,0,0,0.5)';
+					msgElm.style.fontSize = '50px';
+					msgElm.style.color = 'white';
+					msgElm.innerText = 'This video has been blocked by YouTube Focus';
+					msgElm.id = 'FocusYouTube-Message';
+					msgCont.appendChild(msgElm);
+					capCont.appendChild(msgCont);
+				}
+			});
+			videoObserver.observe(document.getElementsByClassName('style-scope ytd-player')[0],{subtree:true,childList:true});
+		}
+	}
+}
 function change() {
+	console.log(logTag+'Detected change');
 	const notifelm = document.querySelector('button[aria-label="Notifications"]');
 	const commeelm = document.querySelector("ytd-comments#comments");
 	const revidelm = document.getElementById("related");
@@ -69,7 +129,33 @@ function change() {
 	if(lchatelm){if(odata.lchat){ lchatelm.style.display = "none";podata.lchat = odata.lchat }else if(podata.lchat){ lchatelm.style.display = "";podata.lchat = odata.lchat }};
 	if(donshelm){if(odata.donsh){ donshelm.style.display = "none";podata.donsh = odata.donsh }else if(podata.donsh){ donshelm.style.display = "";podata.donsh = odata.donsh }};
 }
-const observer = new MutationObserver(mutations => {change();});
+//let foundNum = 0;
+const InitObserver = new MutationObserver(()=>{
+	const formElm = document.getElementById('microformat');
+	const navElm = document.getElementsByClassName('style-scope yt-page-navigation-progress')[0];
+	if(formElm){
+		//foundNum++;
+		const FormatObserver = new MutationObserver(processFormat);
+		FormatObserver.observe(formElm,{subtree:true,childList:true});
+	}
+	if(navElm){
+		//foundNum++;
+		const NavObserver = new MutationObserver(change);
+		NavObserver.observe(navElm,{attributes:true});//navElm
+	}
+	/*
+	if(foundNum >= 2){
+		InitObserver.disconnect();
+	}
+	*/
+	if(document.getElementsByClassName('ytp-miniplayer-ui')[0]){
+		console.log(logTag+'Detected load finish');
+		InitObserver.disconnect();
+		processFormat();
+	}
+	change();
+});
+InitObserver.observe(document.body,{subtree:true,childList:true});
 //Get settings
 chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 	switch(m.block.set){
@@ -87,12 +173,7 @@ chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 	odata = m;
 })
 chrome.runtime.onMessage.addListener((obj, sender, res) => {
-	const {
-		type,
-		data
-	} = obj;
-	//alert(obj)
-	switch(type){
+	switch(obj.type){
 		case "blockupdate":
 			switch(data.set){
 				case 1:
@@ -112,7 +193,3 @@ chrome.runtime.onMessage.addListener((obj, sender, res) => {
 			break;
 	}
 })
-observer.observe(document.body, {
-	childList: true,
-	subtree: true
-});

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTubeFocused",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Stop distractions on YouTube!",
   "permissions": ["storage","tabs"],
   "background": {
@@ -24,7 +24,8 @@
   "content_scripts": [
     {
       "matches": [ "https://*.youtube.com/*" ],
-      "js": [ "script.js" ]
+      "js": [ "script.js" ],
+	  "css": ["swirl.css"]
     }
   ]
 }

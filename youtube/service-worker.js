@@ -1,6 +1,6 @@
 'use strict';
 //Must have chrome 99+
-var sdata = {
+let sdata = {
 	version: 1,
 	block: {
 		set: 0,
@@ -28,20 +28,12 @@ var sdata = {
 	lchat: false,
 	donsh: false
 }
-var btabs = [];
-var param = {
+let btabs = [];
+let param = {
 	version: 1,
 	sbadge: true,
 	rnotes: true
 }
-/*
-async function sendMessageToActiveTab(message) {
-	const [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
-	const response = await chrome.tabs.sendMessage(tab.id, message);
-	// do something with response here, not outside the function
-	return response;
-}
-*/
 function updBdg(){
 	if(param.sbadge){
 		chrome.action.setBadgeText({text: btabs.length.toString()});
@@ -49,15 +41,9 @@ function updBdg(){
 		chrome.action.setBadgeText({text: ""});
 	}
 }
-async function vBtabs(){
-	//console.log(btabs.length);
+function vBtabs(){
 	for(let i=btabs.length-1;i>=0;i--){
 		chrome.tabs.get(btabs[i],()=>{if(chrome.runtime.lastError){btabs.splice(i,1);console.log(btabs)}})
-		/*
-		await chrome.tabs.get(btabs[i]);
-		if(chrome.runtime.lastError){btabs.splice(i,1)};
-		console.log(chrome.runtime.lastError);
-		*/
 	}
 }
 function updIco(){
@@ -65,9 +51,9 @@ function updIco(){
 		case 0:
 			chrome.action.setIcon({
 				path: {
-					16: "icon-16.png",   // Path to the 16x16 icon
-					48: "icon-48.png",   // Path to the 48x48 icon
-					128: "icon-128.png"  // Path to the 128x128 icon
+					16: "icon-16.png",
+					48: "icon-48.png",
+					128: "icon-128.png"
 				}
 			}, () => {
 				if (chrome.runtime.lastError) {
@@ -80,9 +66,9 @@ function updIco(){
 		default:
 			chrome.action.setIcon({
 				path: {
-					16: "ocon-16.png",   // Path to the 16x16 icon
-					48: "ocon-48.png",   // Path to the 48x48 icon
-					128: "ocon-128.png"  // Path to the 128x128 icon
+					16: "ocon-16.png",
+					48: "ocon-48.png",
+					128: "ocon-128.png"
 				}
 			}, () => {
 				if (chrome.runtime.lastError) {
