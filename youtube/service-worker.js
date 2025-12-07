@@ -1,7 +1,18 @@
+/*
+Hey :D looks like ur looking at our code! 
+If you'd like to join our cool (awesome) software organization, 
+contact us via email: 
+frost@frostco.org
+
+Or you can contact me via:
+Email: sky@frostco.org
+Discord: pacifiky
+Instagram: pacifiky
+*/
 'use strict';
 //Must have chrome 99+
 let sdata = {
-	version: 1,
+	version: 2,
 	block: {
 		set: 0,
 		data: ""
@@ -26,7 +37,8 @@ let sdata = {
 	mnavi: false,
 	playl: false,
 	lchat: false,
-	donsh: false
+	donsh: false,
+	thumb: false
 }
 let btabs = [];
 let param = {
@@ -134,7 +146,23 @@ chrome.runtime.onMessage.addListener((obj, sender, res)=>{
 //Request storage for sdata
 chrome.storage.local.get(["blind_settings","blind_ex_settings","blind_tabs"]).then((d)=>{
 	if(d.blind_settings){sdata = d.blind_settings;updIco()}else{console.log("Empty settings! Creating new...");chrome.storage.local.set({"blind_settings":sdata});};
-	if(d.blind_ex_settings){param = d.blind_ex_settings;if(param.version != 1){param.version = 1;param.rnotes = true;chrome.storage.local.set({"blind_ex_settings":param});};updBdg();}else{console.log("Empty exsettings! Creating new...");chrome.storage.local.set({"blind_ex_settings":param});};
+	if(d.blind_ex_settings){
+		param = d.blind_ex_settings;
+		if(param.version == 0){
+			param.version = 1;
+			param.rnotes = true;
+			chrome.storage.local.set({"blind_ex_settings":param});
+		}
+		if(param.version == 1){
+			param.version = 2;
+			param.thumb = false;
+			chrome.storage.local.set({"blind_ex_settings":param});
+		};
+		updBdg();
+	}else{
+		console.log("Empty exsettings! Creating new...");
+		chrome.storage.local.set({"blind_ex_settings":param});
+	};
 	if(d.blind_tabs){btabs = d.blind_tabs;vBtabs();};
 });
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {

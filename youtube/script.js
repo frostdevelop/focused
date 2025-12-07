@@ -1,3 +1,14 @@
+/*
+Hey :D looks like ur looking at our code! 
+If you'd like to join our cool (awesome) software organization, 
+contact us via email: 
+frost@frostco.org
+
+Or you can contact me via:
+Email: sky@frostco.org
+Discord: pacifiky
+Instagram: pacifiky
+*/
 let odata = {
   notif: false,
   comme: false,
@@ -19,7 +30,8 @@ let odata = {
   mnavi: false,
   playl: false,
   lchat: false,
-  donsh: false
+  donsh: false,
+  thumb: false
 }
 const podata = Object.assign({},odata);
 const logTag = '\033[41m[FocusYouTube]\033[0m ';
@@ -84,7 +96,7 @@ function processFormat(){
 }
 function change() {
 	console.log(logTag+'Detected change');
-	const notifelm = document.querySelector('button[aria-label="Notifications"]');
+	const notifelm = document.getElementsByTagName('ytd-notification-topbar-button-renderer')[0];
 	const commeelm = document.querySelector("ytd-comments#comments");
 	const revidelm = document.getElementById("related");
 	const etileelm = document.querySelector("div.html5-endscreen.ytp-player-content.videowall-endscreen.ytp-show-tiles");
@@ -128,26 +140,25 @@ function change() {
 	//removed try catch cuz expensive }catch(e){console.log("Playlist elm not found")};
 	if(lchatelm){if(odata.lchat){ lchatelm.style.display = "none";podata.lchat = odata.lchat }else if(podata.lchat){ lchatelm.style.display = "";podata.lchat = odata.lchat }};
 	if(donshelm){if(odata.donsh){ donshelm.style.display = "none";podata.donsh = odata.donsh }else if(podata.donsh){ donshelm.style.display = "";podata.donsh = odata.donsh }};
+	const thumbnail = document.getElementsByTagName("yt-Image");
+	const shortThumbnail = document.getElementsByTagName("yt-thumbnail-view-model");
+	if(odata.thumb){
+		for(let i=0;i<thumbnail.length;i++) thumbnail[i].style.display = "none";
+		for(let i=0;i<shortThumbnail.length;i++) shortThumbnail[i].style.display = "none";
+		podata.thumb = odata.thumb;
+	}else if(podata.thumb){
+		for(let i=0;i<thumbnail.length;i++) thumbnail[i].style.display = "";
+		for(let i=0;i<shortThumbnail.length;i++) shortThumbnail[i].style.display = "";
+		podata.thumb = odata.thumb;
+	}
 }
-//let foundNum = 0;
 const InitObserver = new MutationObserver(()=>{
+//window.addEventListener("beforeinstallprompt", ()=>{
 	const formElm = document.getElementById('microformat');
-	const navElm = document.getElementsByClassName('style-scope yt-page-navigation-progress')[0];
 	if(formElm){
-		//foundNum++;
 		const FormatObserver = new MutationObserver(processFormat);
 		FormatObserver.observe(formElm,{subtree:true,childList:true});
 	}
-	if(navElm){
-		//foundNum++;
-		const NavObserver = new MutationObserver(change);
-		NavObserver.observe(navElm,{attributes:true});//navElm
-	}
-	/*
-	if(foundNum >= 2){
-		InitObserver.disconnect();
-	}
-	*/
 	if(document.getElementsByClassName('ytp-miniplayer-ui')[0]){
 		console.log(logTag+'Detected load finish');
 		InitObserver.disconnect();
@@ -156,6 +167,8 @@ const InitObserver = new MutationObserver(()=>{
 	change();
 });
 InitObserver.observe(document.body,{subtree:true,childList:true});
+window.addEventListener("yt-navigate-finish",change);
+window.addEventListener("yt-guide-toggle",change);
 //Get settings
 chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 	switch(m.block.set){
@@ -175,7 +188,7 @@ chrome.runtime.sendMessage({type: "settingrequest",data: {}}).then((m)=>{
 chrome.runtime.onMessage.addListener((obj, sender, res) => {
 	switch(obj.type){
 		case "blockupdate":
-			switch(data.set){
+			switch(obj.data.set){
 				case 1:
 					window.location.href = data.data;
 					break;
@@ -187,8 +200,7 @@ chrome.runtime.onMessage.addListener((obj, sender, res) => {
 			}
 			break;
 		case "flagupdate":
-			//console.log(data);
-			odata = data;
+			odata = obj.data;
 			change();
 			break;
 	}
